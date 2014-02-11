@@ -24,19 +24,20 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.hardware.input.InputManager;
+import android.graphics.PixelFormat;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputMethod;
 
 import com.volosyukivan.RemoteKeyListener.Stub;
 
@@ -140,6 +141,19 @@ public class WiFiInputMethod extends InputMethodService {
         serviceConnection, BIND_AUTO_CREATE) == false) {
       throw new RuntimeException("failed to connect to HttpService");
     }
+    
+    /* The mouse stuff */
+    WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+    		WindowManager.LayoutParams.WRAP_CONTENT,
+    		WindowManager.LayoutParams.WRAP_CONTENT,
+    		WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+    		WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+    		WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
+    		WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+    		PixelFormat.TRANSLUCENT);
+    WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+    Display display = wm.getDefaultDisplay();  // get phone display size
+    /*FIXME to be continued */
   }
 
   @Override
