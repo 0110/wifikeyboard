@@ -13,3 +13,9 @@ Members
 ------- 
 * Ivan.Volosyuk
 * v...@google.com
+
+Build
+=====
+
+* Import Project to eclipse
+* Run ''make_template.py'' to generate the html page
