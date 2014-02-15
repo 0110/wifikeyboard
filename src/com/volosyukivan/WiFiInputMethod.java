@@ -33,6 +33,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
@@ -93,6 +94,7 @@ public class WiFiInputMethod extends InputMethodService {
 
   PowerManager.WakeLock wakeLock;
   HashSet<Integer> pressedKeys = new HashSet<Integer>();
+  private WebCursorView mCurserView;
 
   @Override
   public void onCreate() {
@@ -153,7 +155,9 @@ public class WiFiInputMethod extends InputMethodService {
     		PixelFormat.TRANSLUCENT);
     WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
     Display display = wm.getDefaultDisplay();  // get phone display size
+    mCurserView = new WebCursorView(getApplicationContext());
     /*FIXME to be continued */
+    wm.addView(mCurserView, params);
   }
 
   @Override
