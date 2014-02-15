@@ -59,11 +59,11 @@ public final class KeycodeConvertor {
       // public static final int KEYCODE_DPAD_LEFT = 21;
       // public static final int KEYCODE_DPAD_RIGHT = 22;
       // public static final int KEYCODE_DPAD_CENTER = 23;
-      // arrow keys
+      // Number pad
       case 38: return KeyEvent.KEYCODE_DPAD_UP;
       case 40: return KeyEvent.KEYCODE_DPAD_DOWN;
-      case 37: return KeyEvent.KEYCODE_DPAD_LEFT;
-      case 39: return KeyEvent.KEYCODE_DPAD_RIGHT;
+      case 37: return KeyEvent.KEYCODE_NUMPAD_4;
+      case 39: return KeyEvent.KEYCODE_NUMPAD_6;
       // Insert
       case 112: return KeyEvent.KEYCODE_DPAD_CENTER;
       case 45: return KeyEvent.KEYCODE_DPAD_CENTER;

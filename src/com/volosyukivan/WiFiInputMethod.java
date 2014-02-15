@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -33,7 +34,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
@@ -155,7 +155,9 @@ public class WiFiInputMethod extends InputMethodService {
     		PixelFormat.TRANSLUCENT);
     WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
     Display display = wm.getDefaultDisplay();  // get phone display size
-    mCurserView = new WebCursorView(getApplicationContext());
+    Point screenDimension = new Point();
+    display.getSize(screenDimension);
+    mCurserView = new WebCursorView(getApplicationContext(), screenDimension);
     /*FIXME to be continued */
     wm.addView(mCurserView, params);
   }
@@ -213,6 +215,12 @@ public class WiFiInputMethod extends InputMethodService {
       case KeyEvent.KEYCODE_SHIFT_LEFT:
       case KeyEvent.KEYCODE_HOME:
       case KeyEvent.KEYCODE_MENU: return;
+      case KeyEvent.KEYCODE_NUMPAD_4:
+    	  mCurserView.decreaseX();
+    	  return;
+      case KeyEvent.KEYCODE_NUMPAD_6:
+    	  mCurserView.increaseX();
+    	  return;
       }
     }
     if (pressed) {
