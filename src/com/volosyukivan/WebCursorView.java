@@ -46,14 +46,16 @@ public class WebCursorView extends View {
 	}
 
 	public void setCursor(final int posx, final int posy) {
-		mCursor.top = posx;
-		mCursor.bottom = posy;
+		mCursor.top = posy + 7;
+		mCursor.bottom = posy - 7;
+		mCursor.left = posx - 7;
+		mCursor.right = posx + 7;
 		invalidate();
 	}
 	
 	public void fire() {
-		final int posx = (int) mCursor.left;
-		final int posy = (int) mCursor.top;
+		final int posx = (int) mCursor.left + 2;
+		final int posy = (int) mCursor.top + 2;
 		
 		//inject pointer event
 		int[] ptrs = { 0 };

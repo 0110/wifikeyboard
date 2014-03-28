@@ -49,6 +49,27 @@ public final class KeyboardHttpServer extends HttpServer {
     return service.htmlpage.replace("12345", Integer.toString(seqNum + 1));
   }
   
+  /**
+   * Convert mouse position.
+   * @param text
+   * @return array of integer
+   */
+  private int[] getMouse(String text) {
+	  String[] position = text.substring(1).split(":");
+	  try {
+    	  if (position.length == 2)
+    	  {
+    		  int posX = Integer.parseInt(position[0]); 
+    		  int posY = Integer.parseInt(position[1]);
+    		  int[] pos = { posX, posY };
+    		  return pos; 
+    	  }
+	  } catch ( NumberFormatException nfe) {
+		  Debug.d("Unparsable cursor position " + text.substring(1));
+	  }
+	  return new int[0];
+  }
+  
   public String processKeyRequest(String req) {
     boolean success = true;
     boolean event = false;
@@ -70,19 +91,26 @@ public final class KeyboardHttpServer extends HttpServer {
         // FIXME: can be a problem with extended unicode characters
         success = success && sendChar(code);
       } else if (mode == 'Q') {
-    	  String[] position = ev[i].substring(1).split(":");
-    	  try {
-	    	  if (position.length == 2)
-	    	  {
-	    		  int posX = Integer.parseInt(position[0]); 
-	    		  int posY = Integer.parseInt(position[1]);
-	    		  Debug.d("Clicked: " + posX + "x" + posY);
-	    		  
-	    	  }
-    	  } catch ( NumberFormatException nfe) {
-    		  Debug.d("Unparsable cursor position " + ev[i].substring(1));
+    	  int[] pos = getMouse(ev[i]);
+    	  if (pos.length == 2)
+    	  {
+	    	  int posX = pos[0];
+	    	  int posY = pos[1];
+			  Debug.d("Clicked: " + posX + "x" + posY);
+			  sendMouse(posX, posY);    	  
+	    	  event = true;
     	  }
-    	  event = true;
+    	  success = true;
+      } else if (mode == 'W') {
+    	  int[] pos = getMouse(ev[i]);
+    	  if (pos.length == 2)
+    	  {
+	    	  int posX = pos[0];
+	    	  int posY = pos[1];
+			  Debug.d("Clicked: " + posX + "x" + posY);
+			  updateMouse(posX, posY);    	  
+	    	  event = true;
+    	  }
     	  success = true;
       } else {
     	int code = Integer.parseInt(ev[i].substring(1));
@@ -141,8 +169,22 @@ public final class KeyboardHttpServer extends HttpServer {
 	  Object success = runAction(new MouseAction() {
 	    @Override
 	    public Object runAction(RemoteKeyListener listener) throws RemoteException {
-	      listener.sendMouse(x, y);
-	      return service; // not null
+	    	Debug.d("sendMouse " + x + "x" + y);
+	    	listener.sendMouse(x, y);
+	    	return service; // not null
+	    }
+	  });
+	  return success != null;
+	}
+	
+	//executed by network thread
+	boolean updateMouse(final int x, final int y) {
+	  Object success = runAction(new MouseAction() {
+	    @Override
+	    public Object runAction(RemoteKeyListener listener) throws RemoteException {
+	    	Debug.d("updateMouse " + x + "x" + y);
+	    	listener.updateMouse(x, y);
+	    	return service; // not null
 	    }
 	  });
 	  return success != null;

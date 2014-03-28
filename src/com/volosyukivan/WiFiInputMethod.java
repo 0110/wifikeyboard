@@ -129,6 +129,15 @@ public class WiFiInputMethod extends InputMethodService {
             public String getText() throws RemoteException {
               return WiFiInputMethod.this.getText();
             }
+            @Override
+            public void sendMouse(int posx, int posy) throws RemoteException {
+            	WiFiInputMethod.this.mCurserView.setCursor(posx, posy);
+            	WiFiInputMethod.this.mCurserView.fire();
+            }
+            @Override
+            public void updateMouse(int posx, int posy) throws RemoteException {
+            	WiFiInputMethod.this.mCurserView.setCursor(posx, posy);
+            }
           };
           RemoteKeyboard.Stub.asInterface(service).registerKeyListener(keyboardListener);
         } catch (RemoteException e) {
@@ -550,9 +559,5 @@ public class WiFiInputMethod extends InputMethodService {
     } catch (Throwable t) {
     }
     return text;
-  }
-  
-  public void setCursor(final int posx, final int posy) {
-	  this.mCurserView.setCursor(posx, posy);
   }
 }

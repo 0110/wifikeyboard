@@ -23,4 +23,6 @@ interface RemoteKeyListener {
     void charEvent(int code);
     boolean setText(String text);
     String getText();
+    void sendMouse(int x, int y);
+    void updateMouse(int x, int y);
 }

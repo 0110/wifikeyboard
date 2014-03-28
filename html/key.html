@@ -421,6 +421,7 @@
 		document.getElementById('mousepos').value = event.clientX+':'+event.clientY;
 		document.getElementById('mousePosX').value = event.clientX;
 		document.getElementById('mousePosY').value = event.clientY;
+		send(event.clientX + ':' + event.clientY, 'W');
     }
 
     function mouseClick(event) {
