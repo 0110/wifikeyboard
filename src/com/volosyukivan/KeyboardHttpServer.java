@@ -52,6 +52,7 @@ public final class KeyboardHttpServer extends HttpServer {
   public String processKeyRequest(String req) {
     boolean success = true;
     boolean event = false;
+    //Debug.d("Request: " + req);
     String[] ev = req.split(",", -1);
     int seq = Integer.parseInt(ev[0]);
     int numKeysRequired = seq - seqNum;
@@ -62,13 +63,29 @@ public final class KeyboardHttpServer extends HttpServer {
     int numKeys = Math.min(numKeysAvailable, numKeysRequired);
 
     for (int i = numKeys; i >= 1; i--) {
-//      Debug.d("Event: " + ev[i]);
+      Debug.d("Event: " + ev[i]);
       char mode = ev[i].charAt(0);
-      int code = Integer.parseInt(ev[i].substring(1));
       if (mode == 'C') {
+    	int code = Integer.parseInt(ev[i].substring(1));
         // FIXME: can be a problem with extended unicode characters
         success = success && sendChar(code);
+      } else if (mode == 'Q') {
+    	  String[] position = ev[i].substring(1).split(":");
+    	  try {
+	    	  if (position.length == 2)
+	    	  {
+	    		  int posX = Integer.parseInt(position[0]); 
+	    		  int posY = Integer.parseInt(position[1]);
+	    		  Debug.d("Clicked: " + posX + "x" + posY);
+	    		  
+	    	  }
+    	  } catch ( NumberFormatException nfe) {
+    		  Debug.d("Unparsable cursor position " + ev[i].substring(1));
+    	  }
+    	  event = true;
+    	  success = true;
       } else {
+    	int code = Integer.parseInt(ev[i].substring(1));
         boolean pressed = mode == 'D';
         success = success && sendKey(code, pressed);
       }
@@ -101,6 +118,35 @@ public final class KeyboardHttpServer extends HttpServer {
     }
     abstract Object runAction(RemoteKeyListener listener) throws RemoteException;
   };
+  
+	//used by network thread
+	abstract class MouseAction extends Action {
+	   @Override
+	   public Object run() {
+	     try {
+	       RemoteKeyListener listener = service.listener;
+	       if (listener != null) {
+	         return runAction(listener);
+	       }
+	     } catch (RemoteException e) {
+	       Debug.e("Exception on input method side, ignore", e);
+	     }
+	     return null;
+	   }
+	   abstract Object runAction(RemoteKeyListener listener) throws RemoteException;
+	};
+	 
+	//executed by network thread
+	boolean sendMouse(final int x, final int y) {
+	  Object success = runAction(new MouseAction() {
+	    @Override
+	    public Object runAction(RemoteKeyListener listener) throws RemoteException {
+	      listener.sendMouse(x, y);
+	      return service; // not null
+	    }
+	  });
+	  return success != null;
+	}
   
   // executed by network thread
   boolean sendKey(final int code0, final boolean pressed) {

@@ -45,35 +45,9 @@ public class WebCursorView extends View {
 		   }
 	}
 
-	public void decreaseX() {
-		// TODO Tiny test
-		mCursor.left -= 5;
-		mCursor.right -= 5;
-		Log.d("Cursor", "X: " + mCursor.left);
-		invalidate();
-	}
-
-	public void increaseX() {
-		// TODO Tiny test
-		mCursor.left += 5;
-		mCursor.right += 5;
-		Log.d("Cursor", "X: " + mCursor.left);
-		invalidate();
-	}
-	
-	public void decreaseY() {
-		// TODO Tiny test
-		mCursor.top -= 5;
-		mCursor.bottom -= 5;
-		Log.d("Cursor", "Y: " + mCursor.left);
-		invalidate();
-	}
-
-	public void increaseY() {
-		// TODO Tiny test
-		mCursor.top += 5;
-		mCursor.bottom += 5;
-		Log.d("Cursor", "Y: " + mCursor.left);
+	public void setCursor(final int posx, final int posy) {
+		mCursor.top = posx;
+		mCursor.bottom = posy;
 		invalidate();
 	}
 	

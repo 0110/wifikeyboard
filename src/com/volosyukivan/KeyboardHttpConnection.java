@@ -230,7 +230,7 @@ public final class KeyboardHttpConnection extends HttpConnection {
   private ByteBuffer onKeyRequest() {
     String response = server.processKeyRequest(
         new String(request, cmdEnd + 1, queryEnd));
-//    Log.d("wifikeyboard", "response = " + response);
+    //Log.d("wifikeyboard", "response = " + response);
     Map<String, ByteBuffer> cache = responseCache.get();
     if (cache == null) {
       cache = new TreeMap<String, ByteBuffer>();

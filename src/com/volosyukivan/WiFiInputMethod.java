@@ -218,16 +218,6 @@ public class WiFiInputMethod extends InputMethodService {
       case KeyEvent.KEYCODE_SHIFT_LEFT:
       case KeyEvent.KEYCODE_HOME:
       case KeyEvent.KEYCODE_MENU: return;
-      case KeyEvent.KEYCODE_NUMPAD_4:
-    	  mCurserView.decreaseX(); return;
-      case KeyEvent.KEYCODE_NUMPAD_6:
-    	  mCurserView.increaseX(); return;
-      case KeyEvent.KEYCODE_NUMPAD_8:
-    	  mCurserView.decreaseY(); return;
-      case KeyEvent.KEYCODE_NUMPAD_2:
-    	  mCurserView.increaseY(); return;
-      case KeyEvent.KEYCODE_NUMPAD_5:
-    	  mCurserView.fire(); return;
       }
     }
     if (pressed) {
@@ -560,5 +550,9 @@ public class WiFiInputMethod extends InputMethodService {
     } catch (Throwable t) {
     }
     return text;
+  }
+  
+  public void setCursor(final int posx, final int posy) {
+	  this.mCurserView.setCursor(posx, posy);
   }
 }
