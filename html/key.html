@@ -410,23 +410,16 @@
     	   })();
     }
     window.onload = loadFinished;
-    
-    function mouseUpdate(event) {
-		document.getElementById('mousepos').value = event.clientX+':'+event.clientY;
-		document.getElementById('mousePosX').value = event.clientX;
-		document.getElementById('mousePosY').value = event.clientY;
-    }
 
     function mouseUpdate(event) {
-		document.getElementById('mousepos').value = event.clientX+':'+event.clientY;
-		document.getElementById('mousePosX').value = event.clientX;
-		document.getElementById('mousePosY').value = event.clientY;
-		send(event.clientX + ':' + event.clientY, 'W');
+		
+		document.getElementById('mousepos').value = event.layerX+':'+event.layerY;
+		send(event.layerX + ':' + event.layerY, 'W');
     }
 
     function mouseClick(event) {
-		document.getElementById('mousepos').value = event.clientX + ':' + event.clientY + 'clicked';
-		send(event.clientX + ':' + event.clientY, 'Q');
+		document.getElementById('mousepos').value = event.layerX + ':' + event.layerY + 'clicked';
+		send(event.layerX + ':' + event.layerY, 'Q');
     }
 </script>
 <link rel="icon" type="image/png" href="/icon.png" />
