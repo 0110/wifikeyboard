@@ -33,12 +33,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.hardware.input.InputManager;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 public class HttpService extends Service {
   RemoteKeyListener listener;
@@ -213,6 +218,9 @@ public class HttpService extends Service {
     } catch (IOException e) {
       throw new RuntimeException("failed to load html page", e);
     }
+    
+    setScreenResolutionOfPhone(page);
+    
     while (true) {
       int pos = page.indexOf("$");
       if (pos == -1) break;
@@ -223,7 +231,32 @@ public class HttpService extends Service {
     startServer(this);
   }
   
-  private static void removeNotification(Context context) {
+  /**
+   * Set the resolution of the phone for the textarea in the webpage
+   * @param page
+   */
+  private void setScreenResolutionOfPhone(StringBuilder page) {
+      WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+      Display display = wm.getDefaultDisplay();  // get phone display size
+      Point screenDimension = new Point();
+      display.getSize(screenDimension);
+      
+      /* set the resolution of the current phone */
+      int idx = page.indexOf("${screenheight}");
+      if (idx >= 0)
+      {
+          page.replace(idx, idx + "${screenheight}".length(), ""+screenDimension.y);
+      }
+      
+      idx = page.indexOf("${screenwidth}");
+      if (idx >= 0)
+      {
+          page.replace(idx, idx + "${screenwidth}".length(), ""+screenDimension.x);
+      }
+      
+}
+
+private static void removeNotification(Context context) {
     NotificationManager mgr =
       (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
     mgr.cancelAll();

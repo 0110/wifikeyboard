@@ -1,6 +1,5 @@
 package com.volosyukivan;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,11 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.hardware.input.InputManager;
-import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
-import android.view.InputDevice;
-import android.view.MotionEvent;
 import android.view.View;
 
 /**
