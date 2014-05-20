@@ -96,7 +96,6 @@ public final class KeyboardHttpServer extends HttpServer {
     	  {
 	    	  int posX = pos[0];
 	    	  int posY = pos[1];
-			  Debug.d("Clicked: " + posX + "x" + posY);
 			  sendMouse(posX, posY);    	  
 	    	  event = true;
     	  }
@@ -107,7 +106,6 @@ public final class KeyboardHttpServer extends HttpServer {
     	  {
 	    	  int posX = pos[0];
 	    	  int posY = pos[1];
-			  Debug.d("Clicked: " + posX + "x" + posY);
 			  updateMouse(posX, posY);    	  
 	    	  event = true;
     	  }

@@ -1,5 +1,10 @@
 package com.volosyukivan;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -56,13 +61,34 @@ public class WebCursorView extends View {
 	public void fire() {
 		final int posx = (int) mCursor.left + 2;
 		final int posy = (int) mCursor.top + 2;
-		
-		//inject pointer event
-		int[] ptrs = { 0 };
-		//MotionEvent event = MotionEvent.obtain(SystemClock.uptimeMillis(),SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 1, ptrs, posx, posy, 0, 1, 1, 0, 0,    InputDevice.SOURCE_TOUCHPAD, 0);
-		
-		MotionEvent event = MotionEvent.obtain(SystemClock.uptimeMillis(),SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, posx, posy, 1);
-		this.dispatchTouchEvent(event);
-		Log.d("Cursor", "Click: " + posx + " " + posy);
+        String line;
+        
+		try {
+            Process ret = Runtime.getRuntime().exec("su -c input touchscreen tap " + posx + " " + posy);
+            int retcode = ret.waitFor();
+                        
+            Log.d("Cursor", "Click: " + posx + " " + posy + " returned with " + retcode);
+            if (retcode > 0)
+            {
+                BufferedReader err = new BufferedReader(new InputStreamReader(ret.getErrorStream()));
+                while ((line = err.readLine()) != null)
+                {
+                    Log.d("Cursor", "err: " + line);
+                }
+                BufferedReader out = new BufferedReader(new InputStreamReader(ret.getInputStream()));
+                while ((line = out.readLine()) != null)
+                {
+                    Log.d("Cursor", "out: " + line);
+                }
+            }
+            
+            
+        } catch (IOException e) {
+            Log.e("Cursor", "Impossible to click " + posx + "x" + posy + " because of " + e.getMessage());
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            Log.e("Cursor", "Impossible to click " + posx + "x" + posy + " because of " + e.getMessage());
+            e.printStackTrace();
+        }
 	}
 }

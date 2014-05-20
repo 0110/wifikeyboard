@@ -170,7 +170,6 @@ public class WiFiInputMethod extends InputMethodService {
     Point screenDimension = new Point();
     display.getSize(screenDimension);
     mCurserView = new WebCursorView(getApplicationContext(), screenDimension, im);
-    /*FIXME to be continued */
     wm.addView(mCurserView, params);
   }
 
