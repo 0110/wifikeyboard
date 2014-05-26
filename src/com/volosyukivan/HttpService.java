@@ -144,7 +144,6 @@ RemoteKeyListener listener;
       updateNotification(false);
     }
   };
-private float mScreenFactor;
   
   private static ServerSocketChannel makeSocket(Context context) {
     ServerSocketChannel ch;
@@ -245,19 +244,23 @@ private float mScreenFactor;
       mScreenDimension = new Point();
       display.getSize(mScreenDimension);
       
-      this.mScreenFactor = (float) (mScreenDimension.y / TARGET_HTML_HEIGHT);
+      float screenFactor = (float) (mScreenDimension.y / TARGET_HTML_HEIGHT);
+      
+      Log.v("Server", "Scaling " + mScreenDimension.x + "x" + mScreenDimension.y + " to " 
+              + (int) (mScreenDimension.x * screenFactor) + "x" + TARGET_HTML_HEIGHT
+              + " ( factor: " + screenFactor + ")");
       
       /* set the resolution of the current phone */
       int idx = page.indexOf("${screenheight}");
       if (idx >= 0)
       {
-          page.replace(idx, idx + "${screenheight}".length(), "" + 400 );
+          page.replace(idx, idx + "${screenheight}".length(), "" + TARGET_HTML_HEIGHT );
       }
       
       idx = page.indexOf("${screenwidth}");
       if (idx >= 0)
       {
-          page.replace(idx, idx + "${screenwidth}".length(), "" + (int) (mScreenDimension.x * this.mScreenFactor));
+          page.replace(idx, idx + "${screenwidth}".length(), "" + (int) (mScreenDimension.x / screenFactor));
       }
       
 }
