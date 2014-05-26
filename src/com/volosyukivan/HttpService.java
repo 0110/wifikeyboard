@@ -46,7 +46,10 @@ import android.view.Display;
 import android.view.WindowManager;
 
 public class HttpService extends Service {
-  RemoteKeyListener listener;
+  
+    public static final int TARGET_HTML_HEIGHT = 400;
+  
+RemoteKeyListener listener;
   PortUpdateListener portUpdateListener;
   String htmlpage;
   int port;
@@ -141,6 +144,7 @@ public class HttpService extends Service {
       updateNotification(false);
     }
   };
+private float mScreenFactor;
   
   private static ServerSocketChannel makeSocket(Context context) {
     ServerSocketChannel ch;
@@ -238,20 +242,22 @@ public class HttpService extends Service {
   private void setScreenResolutionOfPhone(StringBuilder page) {
       WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
       Display display = wm.getDefaultDisplay();  // get phone display size
-      Point screenDimension = new Point();
-      display.getSize(screenDimension);
+      mScreenDimension = new Point();
+      display.getSize(mScreenDimension);
+      
+      this.mScreenFactor = (float) (mScreenDimension.y / TARGET_HTML_HEIGHT);
       
       /* set the resolution of the current phone */
       int idx = page.indexOf("${screenheight}");
       if (idx >= 0)
       {
-          page.replace(idx, idx + "${screenheight}".length(), ""+screenDimension.y);
+          page.replace(idx, idx + "${screenheight}".length(), "" + 400 );
       }
       
       idx = page.indexOf("${screenwidth}");
       if (idx >= 0)
       {
-          page.replace(idx, idx + "${screenwidth}".length(), ""+screenDimension.x);
+          page.replace(idx, idx + "${screenwidth}".length(), "" + (int) (mScreenDimension.x * this.mScreenFactor));
       }
       
 }
@@ -282,6 +288,7 @@ private static void removeNotification(Context context) {
   }
 
   private static Runnable onServerFinish = null;
+private Point mScreenDimension;
   
   public static void doStartServer(HttpService context) {
     ServerSocketChannel socket = makeSocket(context);

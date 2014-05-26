@@ -45,7 +45,11 @@ public class WebCursorView extends View {
 		   }
 	}
 
-	public void setCursor(final int posx, final int posy) {
+	public void setCursor(int posx, int posy) {
+	    
+	    posx *=  (mScreenDimension.y / HttpService.TARGET_HTML_HEIGHT);
+	    posy *=  (mScreenDimension.y / HttpService.TARGET_HTML_HEIGHT);
+	    
 		mCursor.top = posy + 7;
 		mCursor.bottom = posy - 7;
 		mCursor.left = posx - 7;
