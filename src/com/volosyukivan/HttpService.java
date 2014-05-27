@@ -48,6 +48,7 @@ import android.view.WindowManager;
 public class HttpService extends Service {
   
     public static final int TARGET_HTML_HEIGHT = 400;
+
   
 RemoteKeyListener listener;
   PortUpdateListener portUpdateListener;
@@ -254,13 +255,13 @@ RemoteKeyListener listener;
       int idx = page.indexOf("${screenheight}");
       if (idx >= 0)
       {
-          page.replace(idx, idx + "${screenheight}".length(), "" + TARGET_HTML_HEIGHT );
+          page.replace(idx, idx + "${screenheight}".length(), "" + TARGET_HTML_HEIGHT);
       }
       
       idx = page.indexOf("${screenwidth}");
       if (idx >= 0)
       {
-          page.replace(idx, idx + "${screenwidth}".length(), "" + (int) (mScreenDimension.x / screenFactor));
+          page.replace(idx, idx + "${screenwidth}".length(), "" + ((int) (mScreenDimension.x / screenFactor)));
       }
       
 }

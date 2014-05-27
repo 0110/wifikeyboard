@@ -1,6 +1,8 @@
 package com.volosyukivan;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -63,11 +65,26 @@ public class WebCursorView extends View {
         String line;
         
 		try {
-            Process ret = Runtime.getRuntime().exec("su -c input touchscreen tap " + posx + " " + posy);
+		    /* Workaround by writing the command into a "shell script" */
+		    File dir = getContext().getDir("bash", Context.MODE_PRIVATE);
+		    final String f = dir.getAbsolutePath() + "/command.sh";
+		    Log.v("Cursor", "Script : " + f);
+		    FileWriter fw = new FileWriter(f);
+		    fw.write("input touchscreen tap " + posx + " " + posy+"");
+		    fw.close();
+		    
+		    Process ret = Runtime.getRuntime().exec("chmod 755 " + f);
             int retcode = ret.waitFor();
-                        
+            Log.v("Cursor", "call : chmod 755 " + f + " returned " + retcode);
+            
+		    final String cmd = "su -c " + f;
+            ret = Runtime.getRuntime().exec(cmd);
+            
+            retcode = ret.waitFor();
+            
             Log.d("Cursor", "Click: " + posx + " " + posy + " returned with " + retcode);
-            if (retcode > 0)
+            Log.v("Cursor", "call : " + cmd);
+            //if (retcode > 0)
             {
                 BufferedReader err = new BufferedReader(new InputStreamReader(ret.getErrorStream()));
                 while ((line = err.readLine()) != null)
