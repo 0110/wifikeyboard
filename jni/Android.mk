@@ -1,3 +1,5 @@
+# Source: https://stackoverflow.com/questions/9460251/how-do-i-build-a-native-command-line-executable-to-run-on-android
+
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
