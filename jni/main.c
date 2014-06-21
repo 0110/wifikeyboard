@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define CMD_LENGTH	32
 
@@ -21,10 +22,10 @@ static int click(int x, int y)
 static int mouse_move(int x, int y)
 {
 	FILE * pFile;
-	pFile = fopen ("/dev/input/mouse0","wb");
+	pFile = fopen ("/dev/input/mouse0","a");
 	if (pFile!=NULL)
 	{
-		fputc(0x28, pFile); /* no click */
+		fputc(0x8, pFile); /* no click */
 		fputc(x, pFile); /* relative X movement */
 		fputc(y, pFile); /* relative Y movement */
 		fclose (pFile);
