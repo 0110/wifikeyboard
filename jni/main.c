@@ -18,10 +18,24 @@ static int click(int x, int y)
 	return res;
 }
 
+static int mouse_move(int x, int y)
+{
+	FILE * pFile;
+	pFile = fopen ("/dev/input/mouse0","wb");
+	if (pFile!=NULL)
+	{
+		fputc(8, pFile); /* no click */
+		fputc(x, pFile); /* relative X movement */
+		fputc(y, pFile); /* relative Y movement */
+		fclose (pFile);
+	}
+	return 0;
+}
+
 int main()
 {
 	printf("Hello World\n");
-	click(120, 120);
+	mouse_move(5, 5);
 	return 0;
 }
 
