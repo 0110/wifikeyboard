@@ -24,7 +24,7 @@ static int mouse_move(int x, int y)
 	pFile = fopen ("/dev/input/mouse0","wb");
 	if (pFile!=NULL)
 	{
-		fputc(8, pFile); /* no click */
+		fputc(0x28, pFile); /* no click */
 		fputc(x, pFile); /* relative X movement */
 		fputc(y, pFile); /* relative Y movement */
 		fclose (pFile);
@@ -34,8 +34,8 @@ static int mouse_move(int x, int y)
 
 int main()
 {
-	printf("Hello World\n");
-	mouse_move(5, 5);
+	printf("Generated %s %s\n", __DATE__, __TIME__);
+	mouse_move(0, 5);
 	return 0;
 }
 
